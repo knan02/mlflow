@@ -61,7 +61,7 @@ class S3ArtifactRepository(ArtifactRepository):
         keys['aws_access_key_id']=assume_role_object['Credentials']['AccessKeyId']
         keys['aws_secret_access_key']=assume_role_object['Credentials']['SecretAccessKey']
         keys['aws_session_token']=assume_role_object['Credentials']['SessionToken']
-    return keys
+      return keys
       
     def log_artifact(self, local_file, artifact_path=None):
         (bucket, dest_path) = data.parse_s3_uri(self.artifact_uri)
