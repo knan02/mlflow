@@ -48,7 +48,7 @@ class S3ArtifactRepository(ArtifactRepository):
     @staticmethod
     def retrieve_temp_cred_if_present():
         import boto3
-        access_keys = {}
+        keys = {}
         if os.getenv("AWS_ROLE_ARN") and os.getenv("AWS_WEB_IDENTITY_TOKEN_FILE"):
             sts_connection = boto3.client('sts')
             role_arn = os.getenv("AWS_ROLE_ARN")
