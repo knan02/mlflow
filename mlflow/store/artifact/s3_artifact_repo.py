@@ -40,28 +40,30 @@ class S3ArtifactRepository(ArtifactRepository):
         # https://github.com/mlflow/mlflow/issues so we know your use-case!
         signature_version = os.environ.get('MLFLOW_EXPERIMENTAL_S3_SIGNATURE_VERSION', 's3v4')
         keys = self.retrieve_temp_cred_if_present()
+        print("Access keys: {}".format(keys))
         return boto3.client('s3',
                             config=Config(signature_version=signature_version),
                             endpoint_url=s3_endpoint_url, **keys)
 
     @staticmethod
     def retrieve_temp_cred_if_present():
-      access_keys = {}
-      if os.getenv("AWS_ROLE_ARN") and os.getenv("AWS_WEB_IDENTITY_TOKEN_FILE"):
-        sts_connection = boto3.client('sts')
-        role_arn = os.getenv("AWS_ROLE_ARN")
-        web_identity_token = None
-        with open(os.getenv("AWS_WEB_IDENTITY_TOKEN_FILE"), 'r') as content_file:
-            web_identity_token = content_file.read()
-        assume_role_object = sts_connection.assume_role_with_web_identity(
-               RoleArn=role_arn,
-               RoleSessionName="mlflow_s3_session",
-               WebIdentityToken=web_identity_token
-        )
-        keys['aws_access_key_id']=assume_role_object['Credentials']['AccessKeyId']
-        keys['aws_secret_access_key']=assume_role_object['Credentials']['SecretAccessKey']
-        keys['aws_session_token']=assume_role_object['Credentials']['SessionToken']
-      return keys
+        import boto3
+        access_keys = {}
+        if os.getenv("AWS_ROLE_ARN") and os.getenv("AWS_WEB_IDENTITY_TOKEN_FILE"):
+            sts_connection = boto3.client('sts')
+            role_arn = os.getenv("AWS_ROLE_ARN")
+            web_identity_token = None
+            with open(os.getenv("AWS_WEB_IDENTITY_TOKEN_FILE"), 'r') as content_file:
+                web_identity_token = content_file.read()
+            assume_role_object = sts_connection.assume_role_with_web_identity(
+                   RoleArn=role_arn,
+                   RoleSessionName="mlflow_s3_session",
+                   WebIdentityToken=web_identity_token
+            )
+            keys['aws_access_key_id']=assume_role_object['Credentials']['AccessKeyId']
+            keys['aws_secret_access_key']=assume_role_object['Credentials']['SecretAccessKey']
+            keys['aws_session_token']=assume_role_object['Credentials']['SessionToken']
+        return keys
       
     def log_artifact(self, local_file, artifact_path=None):
         (bucket, dest_path) = data.parse_s3_uri(self.artifact_uri)
