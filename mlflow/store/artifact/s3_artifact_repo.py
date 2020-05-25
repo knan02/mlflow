@@ -39,12 +39,17 @@ class S3ArtifactRepository(ArtifactRepository):
         # NOTE: If you need to specify this env variable, please file an issue at
         # https://github.com/mlflow/mlflow/issues so we know your use-case!
         signature_version = os.environ.get('MLFLOW_EXPERIMENTAL_S3_SIGNATURE_VERSION', 's3v4')
+        return boto3.client('s3',
+                            config=Config(signature_version=signature_version),
+                            endpoint_url=s3_endpoint_url)
+        '''
         keys = self.retrieve_temp_cred_if_present()
         print("Access keys: {}".format(keys))
         return boto3.client('s3',
                             config=Config(signature_version=signature_version),
                             endpoint_url=s3_endpoint_url, **keys)
-
+        '''
+    '''
     @staticmethod
     def retrieve_temp_cred_if_present():
         import boto3
@@ -64,7 +69,8 @@ class S3ArtifactRepository(ArtifactRepository):
             keys['aws_secret_access_key']=assume_role_object['Credentials']['SecretAccessKey']
             keys['aws_session_token']=assume_role_object['Credentials']['SessionToken']
         return keys
-      
+    '''
+
     def log_artifact(self, local_file, artifact_path=None):
         (bucket, dest_path) = data.parse_s3_uri(self.artifact_uri)
         if artifact_path:

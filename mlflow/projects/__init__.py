@@ -830,8 +830,8 @@ def _get_s3_artifact_cmd_and_envs(artifact_repo):
     if posixpath.exists(aws_path):
         volumes = ["-v", "%s:%s" % (str(aws_path), "/.aws")]
     envs = {
-        "AWS_SECRET_ACCESS_KEY": os.environ.get("AWS_SECRET_ACCESS_KEY"),
-        "AWS_ACCESS_KEY_ID": os.environ.get("AWS_ACCESS_KEY_ID"),
+        #"AWS_SECRET_ACCESS_KEY": os.environ.get("AWS_SECRET_ACCESS_KEY"),
+        #"AWS_ACCESS_KEY_ID": os.environ.get("AWS_ACCESS_KEY_ID"),
         "MLFLOW_S3_ENDPOINT_URL": os.environ.get("MLFLOW_S3_ENDPOINT_URL")
     }
     envs = dict((k, v) for k, v in envs.items() if v is not None)
