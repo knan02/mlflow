@@ -3,6 +3,7 @@ import os
 import posixpath
 from six.moves import urllib
 
+import boto3
 from mlflow import data
 from mlflow.entities import FileInfo
 from mlflow.exceptions import MlflowException
@@ -33,7 +34,6 @@ class S3ArtifactRepository(ArtifactRepository):
             return None
 
     def _get_s3_client(self):
-        import boto3
         from botocore.client import Config
         s3_endpoint_url = os.environ.get('MLFLOW_S3_ENDPOINT_URL')
         # NOTE: If you need to specify this env variable, please file an issue at
@@ -47,7 +47,6 @@ class S3ArtifactRepository(ArtifactRepository):
 
     @staticmethod
     def retrieve_temp_cred_if_present():
-        import boto3
         keys = {}
         if os.getenv("AWS_ROLE_ARN") and os.getenv("AWS_WEB_IDENTITY_TOKEN_FILE"):
             sts_connection = boto3.client('sts')
