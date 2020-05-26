@@ -97,4 +97,5 @@ def _run_server(file_store_path, default_artifact_root, host, port, static_prefi
         full_command = _build_waitress_command(waitress_opts, host, port)
     else:
         full_command = _build_gunicorn_command(gunicorn_opts, host, port, workers or 4)
+    print("full_command: ".format(full_command))
     exec_cmd(full_command, env=env_map, stream_output=True)

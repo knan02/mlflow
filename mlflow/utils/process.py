@@ -29,6 +29,8 @@ def exec_cmd(cmd, throw_on_error=True, env=None, stream_output=False, cwd=None, 
     if env:
         cmd_env.update(env)
 
+    print('cmd_env: {}'.format(cmd_env))
+    print('env: {}'.format(env))
     if stream_output:
         child = subprocess.Popen(cmd, env=cmd_env, cwd=cwd, universal_newlines=True,
                                  stdin=subprocess.PIPE, **kwargs)
