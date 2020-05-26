@@ -688,6 +688,7 @@ def _get_docker_command(image, active_run, docker_args=None, volumes=None, user_
     for key, value in env_vars.items():
         cmd += ["-e", "{key}={value}".format(key=key, value=value)]
     cmd += [image.tags[0]]
+    print("cmd: {}".format(cmd))
     return cmd
 
 
@@ -827,8 +828,8 @@ def _get_s3_artifact_cmd_and_envs(artifact_repo):
         aws_path = posixpath.expanduser("~/.aws")
 
     volumes = []
-    if posixpath.exists(aws_path):
-        volumes = ["-v", "%s:%s" % (str(aws_path), "/.aws")]
+    #if posixpath.exists(aws_path):
+    #    volumes = ["-v", "%s:%s" % (str(aws_path), "/.aws")]
     envs = {
         "AWS_ROLE_ARN": os.environ.get("AWS_ROLE_ARN"),
         "AWS_WEB_IDENTITY_TOKEN_FILE": os.environ.get("AWS_WEB_IDENTITY_TOKEN_FILE"),
